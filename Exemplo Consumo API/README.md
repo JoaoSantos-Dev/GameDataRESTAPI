@@ -9,7 +9,7 @@ Este documento fornece instruções para configurar e usar o arquivo index.html 
 
 3. **Configurar a URL da API**
   - Abra o arquivo index.html em um editor de texto.
-  - erifique se a URL da API nas funções fetch está correta:
+  - Verifique se a URL da API nas funções fetch está correta:
     ```bash
     fetch('https://localhost:7121/api/dev-events')
   - Substitua https://localhost:7121 pela URL correta do seu servidor API se necessário.
