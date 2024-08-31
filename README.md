@@ -48,6 +48,7 @@ Este projeto é uma API REST desenvolvida com ASP.NET Core 7 para gerenciar um b
 7. **Consumo na Prática**
   - Acesse index.html em "Exemplo Consumo API".
   - Você pode testar o CRUD diretamente pelo site.
+  - Mais detalhes dentro do diretório
 
 # Exemplo de Consumo da API
 
