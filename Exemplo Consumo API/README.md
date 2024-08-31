@@ -16,17 +16,17 @@ Este documento fornece instruções para configurar e usar o arquivo index.html 
 # Uso
 
 1. Carregar Jogos
-  - Clique no botão Carregar Jogos para buscar e listar todos os jogos disponíveis na API.
+  - Clique no botão **Carregar Jogos** para buscar e listar todos os jogos disponíveis na API.
 2. Cadastrar Novo Jogo
-  - Preencha o formulário em Cadastrar Novo Jogo com os detalhes do novo jogo e clique em Cadastrar Jogo.
+  - Preencha o formulário em **Cadastrar Novo Jogo** com os detalhes do novo jogo e clique em **Cadastrar Jogo**.
 3. Atualizar Jogo
-  - Forneça o ID do jogo que deseja atualizar e os novos detalhes no formulário de Atualizar Jogo, e clique em Atualizar Jogo.
+  - Forneça o ID do jogo que deseja atualizar e os novos detalhes no formulário de **Atualizar Jogo**, e clique em **Atualizar Jogo**.
 4.Deletar Jogo
-  - Insira o ID do jogo que deseja deletar no formulário de Deletar Jogo e clique em Deletar Jogo.
+  - Insira o ID do jogo que deseja deletar no formulário de **Deletar Jogo** e clique em **Deletar Jogo**.
 5. Cadastrar Nova Desenvolvedora
-  - Preencha os detalhes da nova desenvolvedora no formulário Cadastrar Nova Desenvolvedora e clique em Cadastrar Desenvolvedora.
+  - Preencha os detalhes da nova desenvolvedora no formulário **Cadastrar Nova Desenvolvedora** e clique em **Cadastrar Desenvolvedora**.
 6. Buscar Jogo por ID
-  - Insira o ID do jogo que deseja buscar no formulário de Buscar Jogo por ID e clique em Buscar Jogo. Os detalhes do jogo serão exibidos abaixo do formulário.
+  - Insira o ID do jogo que deseja buscar no formulário de **Buscar Jogo por ID** e clique em **Buscar Jogo**. Os detalhes do jogo serão exibidos abaixo do formulário.
     
 ### Observações
  - Se você encontrar problemas com CORS, ajuste a configuração da sua API para permitir solicitações do local onde o index.html está hospedado.
