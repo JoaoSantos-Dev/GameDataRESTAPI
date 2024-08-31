@@ -1,0 +1,382 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Base de Jogos</title>
+</head>
+<body>
+    <h1>Base de Dados Jogos Digitais</h1>
+
+    <!-- Botao para carregar eventos -->
+    <button id="loadEventsButton">Carregar Jogos</button>
+    <ul id="events-list"></ul>
+
+    <!-- Formulario para adicionar um novo evento -->
+    <h2>Cadastrar Novo Jogo</h2>
+    <form id="eventForm">
+        <label for="title">Titulo:</label>
+        <input type="text" id="title" name="title" required><br><br>
+
+        <label for="description">Descricao:</label>
+        <textarea id="description" name="description" required></textarea><br><br>
+
+        <label for="startDate">Data de Anuncio:</label>
+        <input type="datetime-local" id="startDate" name="startDate" required><br><br>
+
+        <label for="endDate">Data de Lancamento:</label>
+        <input type="datetime-local" id="endDate" name="endDate" required><br><br>
+
+        <button type="submit">Cadastrar Jogo</button>
+    </form>
+
+    <!-- Formulario para atualizar um evento -->
+    <h2>Atualizar Jogo</h2>
+    <form id="updateEventForm">
+        <label for="title">ID do Jogo:</label>
+        <input type="text" id="updateId" placeholder="ID do Jogo" required><br><br>
+
+        <label for="title">Título:</label>
+        <input type="text" id="updateTitle" placeholder="Título" required><br><br>
+
+        <label for="title">Descricao:</label>
+        <textarea id="updateDescription" placeholder="Descricao"></textarea><br><br>
+
+        <label for="title">Data de Anuncio:</label>
+        <input type="datetime-local" id="updateAnnouncementDate" placeholder="Data de Anuncio" required><br><br>
+
+        <label for="title">Data de Lancamento:</label>
+        <input type="datetime-local" id="updateEndDate" placeholder="Data de Encerramento" required><br><br>
+
+        <button type="submit">Atualizar Jogo</button><br><br>
+
+    </form>
+
+    <!-- Formulario para deletar um evento -->
+    <h2>Deletar Jogo</h2>
+    <form id="deleteEventForm">
+        <label for="deleteId">ID do Jogo:</label>
+        <input type="text" id="deleteId" name="deleteId" required><br><br>
+
+        <button type="submit">Deletar Jogo</button>
+    </form>
+
+    <!-- Cadastrar Novo Palestrante -->
+    <h2>Cadastrar Nova Desenvolvedora</h2>
+    <form id="devForm">
+        <input type="text" id="devEventId" placeholder="ID do Jogo" required><br><br>
+
+        <label for="devName">Nome da Desenvolvedora:</label>
+        <input type="text" id="devName" name="name" required><br><br>
+
+        <label for="devGameTitle">Título do Jogo:</label>
+        <input type="text" id="devGameTitle" name="gameTitle" required><br><br>
+
+        <label for="devGameDescription">Descrição do Jogo:</label>
+        <textarea id="devGameDescription" name="gameDescription" required></textarea><br><br>
+
+        <label for="devSteamProfile">Perfil Steam:</label>
+        <input type="text" id="devSteamProfile" name="steamProfile" required><br><br>
+
+        <button type="submit">Cadastrar Desenvolvedora</button>
+    </form>
+
+    <!-- Formulario para buscar um evento por ID -->
+    <h2>Buscar Jogo por ID</h2>
+    <form id="searchEventForm">
+        <label for="searchId">ID do Jogo:</label>
+        <input type="text" id="searchId" name="searchId" required><br><br>
+
+        <button type="submit">Buscar Jogo</button>
+    </form>
+
+    <!-- Area para exibir detalhes do evento buscado -->
+    <div id="eventDetails"></div>
+
+    <script>
+        // Funcao para carregar eventos
+        function loadEvents() {
+            fetch('https://localhost:7121/api/dev-events')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const eventsList = document.getElementById('events-list');
+                    eventsList.innerHTML = '';
+
+                    if (data.length === 0) {
+                        eventsList.textContent = 'Nenhum evento dispon�vel no momento.';
+                    } else {
+                        data.forEach(event => {
+                            const listItem = document.createElement('li');
+                            listItem.innerHTML = `
+                                                            <strong>Titulo:</strong> ${event.title}<br>
+                                                            <strong>Descricao:</strong> ${event.description}<br>
+                                                            <strong>Data de Inicio:</strong> ${new Date(event.announcementDate).toLocaleString()}<br>
+                                                            <strong>Data de Encerramento:</strong> ${new Date(event.endDate).toLocaleString()}<br>
+                                                            <strong>Id do Jogo:</strong> ${event.id}
+                                                            <br><br>
+                                                        `;
+                            eventsList.appendChild(listItem);
+                        });
+                    }
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar os eventos:', error);
+                    const eventsList = document.getElementById('events-list');
+                    eventsList.textContent = 'Erro ao carregar os eventos. Tente novamente mais tarde.';
+                });
+        }
+
+        // Adicionando evento de clique ao bot�o de carregar eventos
+        document.getElementById('loadEventsButton').addEventListener('click', loadEvents);
+
+        // Funcao para enviar dados do novo evento
+        function submitEvent(event) {
+            event.preventDefault(); // Impede o comportamento padrão de envio do formulário
+            console.log("Função submitEvent chamada");
+
+            const title = document.getElementById('title').value;
+            const description = document.getElementById('description').value;
+            const startDate = document.getElementById('startDate').value;
+            const endDate = document.getElementById('endDate').value;
+
+            if (!title || !description || !startDate || !endDate) {
+                alert("Por favor, preencha todos os campos.");
+                return;
+            }
+
+            const newEvent = {
+                title: title,
+                description: description,
+                announcementDate: new Date(startDate).toISOString(),
+                endDate: new Date(endDate).toISOString()
+            };
+
+            fetch('https://localhost:7121/api/dev-events', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newEvent)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    alert('Evento cadastrado com sucesso!');
+                    document.getElementById('eventForm').reset(); // Limpa o formulário
+                    loadEvents(); // Atualiza a lista de eventos
+                })
+                .catch(error => {
+                    console.error('Erro ao cadastrar o evento:', error);
+                    alert('Erro ao cadastrar o evento. Tente novamente mais tarde.');
+                });
+        }
+
+        // Adicionando evento de envio ao formulário de cadastro
+        document.getElementById('eventForm').addEventListener('submit', submitEvent);
+
+        function updateEvent(event) {
+            event.preventDefault();
+            console.log("Função updateEvent chamada");
+
+            const id = document.getElementById('updateId').value;
+            const title = document.getElementById('updateTitle').value;
+            const description = document.getElementById('updateDescription').value;
+            const announcementDate = document.getElementById('updateAnnouncementDate').value;
+            const endDate = document.getElementById('updateEndDate').value;
+
+            const updatedEvent = {
+                title: title,
+                description: description,
+                announcementDate: new Date(announcementDate).toISOString(),
+                endDate: new Date(endDate).toISOString()
+            };
+
+            fetch(`https://localhost:7121/api/dev-events/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(updatedEvent)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+
+                    // Se o status é 204 No Content, não há corpo para processar
+                    if (response.status === 204) {
+                        return null; // Sem corpo
+                    }
+
+                    // Caso contrário, leia o corpo da resposta como texto
+                    return response.text();
+                })
+                .then(text => {
+                    // Verifique se há corpo para processar
+                    if (text) {
+                        try {
+                            const data = JSON.parse(text);
+                            console.log(data); // Verifique os dados recebidos
+                        } catch (error) {
+                            console.error('Erro ao analisar JSON:', error);
+                        }
+                    }
+
+                    alert('Evento atualizado com sucesso!');
+                    document.getElementById('updateEventForm').reset();
+                    loadEvents();
+                })
+                .catch(error => {
+                    console.error('Erro ao atualizar o evento:', error);
+                    alert('Erro ao atualizar o evento. Tente novamente mais tarde.');
+                });
+        }
+
+        // Adicionando evento de envio ao formulário de atualização
+        document.getElementById('updateEventForm').addEventListener('submit', updateEvent);
+
+        // Funcao para deletar evento
+        function deleteEvent(event) {
+            event.preventDefault(); // Impede o comportamento padr�o de envio do formul�rio
+
+            const id = document.getElementById('deleteId').value;
+
+            fetch(`https://localhost:7121/api/dev-events/${id}`, {
+                method: 'DELETE'
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    // N�o � necess�rio chamar response.json() para DELETE
+                    alert('Evento deletado com sucesso!');
+                    document.getElementById('deleteEventForm').reset(); // Limpa o formul�rio
+                    loadEvents(); // Atualiza a lista de eventos
+                })
+                .catch(error => {
+                    console.error('Erro ao deletar o evento:', error);
+                    alert('Erro ao deletar o evento. Tente novamente mais tarde.');
+                });
+        }
+
+        // Adicionando evento de envio ao formul�rio de dele��o
+        document.getElementById('deleteEventForm').addEventListener('submit', deleteEvent);
+
+        // Funcao para buscar evento por ID
+        function searchEvent(event) {
+            event.preventDefault(); // Impede o comportamento padrão de envio do formulário
+
+            const id = document.getElementById('searchId').value;
+
+            fetch(`https://localhost:7121/api/dev-events/${id}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const eventDetails = document.getElementById('eventDetails');
+                    let devsHtml = '';
+
+                    // Verifica se há desenvolvedores e os adiciona ao HTML
+                    if (data.devs && data.devs.length > 0) {
+                        devsHtml = '<h4>Desenvolvedores:</h4>';
+                        data.devs.forEach(dev => {
+                            devsHtml += `
+                            <div class="dev">
+                                <strong>Nome:</strong> ${dev.name}<br>
+                                <strong>Título do Jogo:</strong> ${dev.gameTitle}<br>
+                                <strong>Descrição do Jogo:</strong> ${dev.gameDescription}<br>
+                                <strong>Perfil no Steam:</strong> ${dev.steamProfile}<br><br>
+                            </div>
+                        `;
+                        });
+                    } else {
+                        devsHtml = '<p>Nenhum desenvolvedor encontrado para este jogo.</p>';
+                    }
+
+                    eventDetails.innerHTML = `
+                                <h3>Detalhes do Jogo:</h3>
+                                <strong>Título:</strong> ${data.title}<br>
+                                <strong>Descrição:</strong> ${data.description}<br>
+                                <strong>Data de Anúncio:</strong> ${new Date(data.announcementDate).toLocaleString()}<br>
+                                <strong>Data de Encerramento:</strong> ${new Date(data.endDate).toLocaleString()}<br>
+                                <strong>ID do Jogo:</strong> ${data.id}<br><br>
+                                ${devsHtml}
+                            `;
+                })
+                .catch(error => {
+                    console.error('Erro ao buscar o jogo:', error);
+                    const eventDetails = document.getElementById('eventDetails');
+                    eventDetails.innerHTML = 'Erro ao buscar o jogo. Tente novamente mais tarde.';
+                });
+        }
+
+        // Adicionando evento de envio ao formulário de busca
+        document.getElementById('searchEventForm').addEventListener('submit', searchEvent);
+
+        // Funcao para enviar dados do palestrante
+        function addDev(event) {
+            event.preventDefault(); // Impede o comportamento padrão de envio do formulário
+
+            const id = document.getElementById('devEventId').value; // ID do Jogo ao qual o dev será associado
+            const name = document.getElementById('devName').value;
+            const gameTitle = document.getElementById('devGameTitle').value;
+            const gameDescription = document.getElementById('devGameDescription').value;
+            const steamProfile = document.getElementById('devSteamProfile').value;
+
+            const newDev = {
+                name: name,
+                gameTitle: gameTitle,
+                gameDescription: gameDescription,
+                steamProfile: steamProfile
+            };
+
+            fetch(`https://localhost:7121/api/dev-events/${id}/devs`, { // Atualizado o endpoint para corresponder à API
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(newDev)
+            })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                    return response.text(); // Alterado para texto para lidar com respostas vazias
+                })
+                .then(data => {
+                    if (data) {
+                        // Se a resposta não estiver vazia, você pode tentar convertê-la para JSON
+                        try {
+                            const jsonData = JSON.parse(data);
+                            console.log('Resposta da API:', jsonData); // Apenas para depuração
+                        } catch (e) {
+                            console.warn('Resposta da API não é JSON:', data);
+                        }
+                    }
+
+                    alert('Dev cadastrado com sucesso!');
+                    document.getElementById('devForm').reset(); // Limpa o formulário
+                })
+                .catch(error => {
+                    console.error('Erro ao cadastrar o dev:', error);
+                    alert('Erro ao cadastrar o dev. Tente novamente mais tarde.');
+                });
+        }
+
+        // Adicionando evento de envio ao formulário de cadastro de dev
+        document.getElementById('devForm').addEventListener('submit', addDev);
+    </script>
+</body>
+</html>
