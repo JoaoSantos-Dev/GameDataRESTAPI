@@ -42,9 +42,9 @@ Este projeto é uma API REST desenvolvida com ASP.NET Core 7 para gerenciar um b
     dotnet ef database update
 5. **Rodar o Projeto**
   - Compile e execute a aplicação no Visual Studio.
-  - A API estará disponível em **https://localhost:5000** o valor da porta (5000) irá variar dependendo da configuração.
+  - A API estará disponível em **https://localhost:7121** o valor da porta (7121) irá variar dependendo da configuração.
 6. **Testar API**
-  - Acesse o Swagger UI em https://localhost:5000/swagger para interagir com a API e testar as funcionalidades.
+  - Acesse o Swagger UI em https://localhost:7121/swagger para interagir com a API e testar as funcionalidades.
 7. **Consumo na Prática**
   - Acesse index.html em "Exemplo Consumo API".
   - Você pode testar o CRUD diretamente pelo site.
