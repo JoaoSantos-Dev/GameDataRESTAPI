@@ -45,6 +45,9 @@ Este projeto é uma API REST desenvolvida com ASP.NET Core 7 para gerenciar um b
   - A API estará disponível em **https://localhost:5000** o valor da porta (5000) irá variar dependendo da configuração.
 6. **Testar API**
   - Acesse o Swagger UI em https://localhost:5000/swagger para interagir com a API e testar as funcionalidades.
+7. **Consumo na Prática**
+  - Acesse index.html em "Exemplo Consumo API".
+  - Você pode testar o CRUD diretamente pelo site.
 
 # Exemplo de Consumo da API
 
