@@ -4,9 +4,10 @@ Este documento fornece instruções para configurar e usar o arquivo index.html 
 
 ### Pré-Requisitos
 
-1. **Servidor da API:** Certifique-se de que a API REST está em execução e acessível. A URL padrão usada no exemplo é https://localhost:7121.
+1. **Servidor da API**
+  - Certifique-se de que a API REST está em execução e acessível. A URL padrão usada no exemplo é https://localhost:7121.
 
-2. **Configurar a URL da API**
+3. **Configurar a URL da API**
   - Abra o arquivo index.html em um editor de texto.
   - erifique se a URL da API nas funções fetch está correta:
     ```bash
